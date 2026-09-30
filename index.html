@@ -9,7 +9,7 @@
   html, body { height: 100%; overflow: hidden; }
   body { font-family: 'Segoe UI', Tahoma, sans-serif; }
 
-  /* ЭКРАН 1 */
+  /* ЭКРАН 1 — ЗАМАНКА */
   #screen1 {
     position: fixed; inset: 0;
     background: linear-gradient(135deg, #7b2ff7 0%, #f107a3 100%);
@@ -46,66 +46,99 @@
     border: none; cursor: pointer;
     box-shadow: 0 10px 30px rgba(0,0,0,0.3);
   }
-  #screen1 .btn:active { transform: scale(0.96); }
 
-  /* ЭКРАН 2 — WINDOWS BLOCKED */
+  /* ЭКРАН 2 — ВИРУС */
   #screen2 {
     display: none; position: fixed; inset: 0;
-    background: linear-gradient(135deg, #001a3a 0%, #003366 100%);
-    color: #fff; align-items: center; justify-content: center;
-    padding: 30px 20px; text-align: center;
-    z-index: 20; overflow-y: auto;
+    background: #0a0a0a;
+    color: #ff2222;
+    font-family: 'Consolas', 'Courier New', monospace;
+    padding: 20px;
+    z-index: 20;
+    overflow: hidden;
   }
-  #screen2.active { display: flex; }
-  #screen2 .container { max-width: 620px; width: 100%; }
-  #screen2 .logo { font-size: 60px; margin-bottom: 10px; }
-  #screen2 .warning {
-    display: inline-block; background: #d13438; color: #fff;
-    padding: 6px 14px; border-radius: 4px;
-    font-size: 13px; font-weight: 600; letter-spacing: 1px;
-    margin-bottom: 25px; animation: blink 1s infinite;
+  #screen2.active { display: block; }
+
+  #screen2 .top {
+    display: flex; align-items: center; justify-content: space-between;
+    background: #ff2222;
+    color: #000;
+    padding: 10px 15px;
+    margin: -20px -20px 20px -20px;
+    font-weight: 700;
+    font-size: 14px;
+    animation: blink 0.8s infinite;
   }
   @keyframes blink {
     0%,100% { opacity: 1; }
-    50% { opacity: 0.4; }
+    50% { opacity: 0.5; }
   }
-  #screen2 h1 { font-size: 26px; font-weight: 600; margin-bottom: 15px; line-height: 1.3; }
-  #screen2 .sub { font-size: 15px; opacity: 0.85; line-height: 1.6; margin-bottom: 30px; }
-  #screen2 .code-box {
-    background: rgba(0,0,0,0.3);
-    border: 1px solid rgba(255,255,255,0.2);
-    border-radius: 8px; padding: 20px; margin-bottom: 25px;
+  #screen2 .icon { font-size: 60px; text-align: center; margin: 10px 0 20px; }
+  #screen2 h1 {
+    font-size: 22px;
+    text-align: center;
+    color: #ff2222;
+    margin-bottom: 15px;
+    text-shadow: 0 0 10px #ff2222;
   }
-  #screen2 .code-label {
-    font-size: 12px; opacity: 0.6;
-    margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px;
+  #screen2 .sub {
+    font-size: 14px;
+    color: #fff;
+    text-align: center;
+    opacity: 0.85;
+    line-height: 1.5;
+    margin-bottom: 25px;
   }
-  #screen2 .code {
-    font-family: 'Consolas', monospace;
-    font-size: 22px; font-weight: 700;
-    letter-spacing: 3px; color: #ffd966;
+  #screen2 .log {
+    background: #000;
+    border: 1px solid #ff2222;
+    padding: 15px;
+    border-radius: 6px;
+    height: 220px;
+    overflow: hidden;
+    font-size: 12px;
+    line-height: 1.5;
+    margin-bottom: 20px;
+    color: #00ff00;
   }
-  #screen2 input {
-    width: 100%; padding: 14px; font-size: 18px;
-    text-align: center; letter-spacing: 4px;
-    background: rgba(0,0,0,0.4);
-    border: 1px solid rgba(255,255,255,0.3);
-    border-radius: 6px; color: #fff; margin-bottom: 15px;
-    font-family: 'Consolas', monospace;
+  #screen2 .log .line { margin-bottom: 3px; }
+  #screen2 .log .warn { color: #ffff00; }
+  #screen2 .log .err { color: #ff2222; }
+  #screen2 .bar {
+    height: 10px;
+    background: #222;
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 8px;
+    border: 1px solid #ff2222;
   }
-  #screen2 input::placeholder { color: rgba(255,255,255,0.3); letter-spacing: 2px; }
-  #screen2 button {
-    width: 100%; padding: 14px;
-    background: #0078D7; color: #fff;
-    border: none; border-radius: 6px;
-    font-size: 16px; font-weight: 600;
-    cursor: pointer; margin-bottom: 20px;
+  #screen2 .bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff2222, #ff8800);
+    width: 0%;
+    transition: width 0.3s;
   }
-  #screen2 .timer {
-    font-size: 14px; color: #ff6b6b;
-    font-weight: 600; margin-bottom: 20px;
+  #screen2 .pct { text-align: center; font-size: 14px; color: #fff; margin-bottom: 15px; }
+  #screen2 .warning {
+    background: #ff2222;
+    color: #000;
+    font-weight: 700;
+    padding: 12px;
+    text-align: center;
+    border-radius: 6px;
+    font-size: 13px;
+    line-height: 1.4;
+    animation: blink 0.6s infinite;
   }
-  #screen2 .contact { font-size: 13px; opacity: 0.7; line-height: 1.6; }
+
+  /* звук — вибро-индикатор */
+  #screen2 .vibro {
+    text-align: center;
+    font-size: 12px;
+    color: #ffff00;
+    margin-top: 15px;
+    opacity: 0.7;
+  }
 </style>
 </head>
 <body>
@@ -119,73 +152,117 @@
     <button class="btn" id="claimBtn">ПОЛУЧИТЬ АРТ</button>
   </div>
 
-  <!-- ЭКРАН 2 -->
+  <!-- ЭКРАН 2 — ВИРУС -->
   <div id="screen2">
-    <div class="container">
-      <div class="logo">🛑</div>
-      <div class="warning">СИСТЕМА ЗАБЛОКИРОВАНА</div>
-      <h1>Ваша копия Windows заблокирована</h1>
-      <p class="sub">Обнаружено нарушение лицензионного соглашения. Для разблокировки устройства введите код активации, полученный от службы поддержки Microsoft.</p>
+    <div class="top">⚠ СИСТЕМА ЗАРАЖЕНА ⚠</div>
+    <div class="icon">🦠</div>
+    <h1>ОБНАРУЖЕН ВИРУС</h1>
+    <p class="sub">На вашем устройстве найдено <b id="virusCount">0</b> угроз. Начинается шифрование личных данных.</p>
 
-      <div class="code-box">
-        <div class="code-label">Код активации вашего устройства</div>
-        <div class="code" id="deviceCode">----</div>
-      </div>
+    <div class="log" id="log"></div>
 
-      <input type="text" id="input" placeholder="ВВЕДИТЕ КОД" maxlength="8">
-      <button onclick="check()">РАЗБЛОКИРОВАТЬ</button>
+    <div class="bar"><div class="bar-fill" id="bar"></div></div>
+    <div class="pct" id="pct">Заражение: 0%</div>
 
-      <div class="timer">⏳ До полной блокировки: <span id="timer">05:00</span></div>
+    <div class="warning">НЕ ЗАКРЫВАЙТЕ СТРАНИЦУ. ВЫКЛЮЧИТЕ УСТРОЙСТВО И ПОЗВОНИТЕ В СЛУЖБУ ПОДДЕРЖКИ: 8-800-XXX-XX-XX</div>
 
-      <div class="contact">
-        Служба поддержки: <b>8-800-XXX-XX-XX</b><br>
-        Назовите оператору код: <b id="codeCopy">----</b>
-      </div>
-    </div>
+    <div class="vibro" id="vibro"></div>
   </div>
 
 <script>
-  const code = Math.random().toString(36).substring(2, 10).toUpperCase();
-  document.getElementById('deviceCode').textContent = code;
-  document.getElementById('codeCopy').textContent = code;
-
-  let sec = 300;
-  const t = document.getElementById('timer');
-  setInterval(() => {
-    if (sec > 0) sec--;
-    const m = String(Math.floor(sec / 60)).padStart(2, '0');
-    const s = String(sec % 60).padStart(2, '0');
-    t.textContent = m + ':' + s;
-  }, 1000);
-
-  function check() {
-    const val = document.getElementById('input').value.trim().toUpperCase();
-    if (val === code) {
-      document.body.innerHTML = '<div style="color:#7cf07c;font-size:40px;font-family:sans-serif;display:flex;height:100vh;align-items:center;justify-content:center;">✅ Разблокировано</div>';
-    } else {
-      const inp = document.getElementById('input');
-      inp.style.borderColor = '#ff2222';
-      inp.value = '';
-      inp.placeholder = 'НЕВЕРНЫЙ КОД';
-      if (navigator.vibrate) navigator.vibrate(200);
-    }
-  }
-
+  // === Экран 1 → Экран 2 ===
   document.getElementById('claimBtn').addEventListener('click', () => {
+    // fullscreen
     const el = document.documentElement;
     if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
     else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
 
-    if (navigator.vibrate) navigator.vibrate([300, 100, 300]);
+    // вибрация
+    if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 500]);
 
+    // звук
     const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
     audio.loop = true;
     audio.play().catch(() => {});
-    setTimeout(() => audio.pause(), 20000);
+    setTimeout(() => audio.pause(), 25000);
 
     document.getElementById('screen1').style.display = 'none';
     document.getElementById('screen2').classList.add('active');
+
+    startVirus();
   });
+
+  // === Логика вируса ===
+  const logEl = document.getElementById('log');
+  const barEl = document.getElementById('bar');
+  const pctEl = document.getElementById('pct');
+  const countEl = document.getElementById('virusCount');
+
+  const logLines = [
+    { t: 'Инициализация сканирования...', c: '' },
+    { t: '> Сканирование /storage/...', c: '' },
+    { t: '> Обнаружено: Trojan.AndroidOS.Banker', c: 'err' },
+    { t: '> Сканирование /data/...', c: '' },
+    { t: '> Обнаружено: Spyware.Agent', c: 'err' },
+    { t: '> Чтение контактов...', c: 'warn' },
+    { t: '> Чтение SMS...', c: 'warn' },
+    { t: '> Доступ к фото/видео...', c: 'warn' },
+    { t: '> Кража паролей...', c: 'err' },
+    { t: '> Шифрование файлов...', c: 'err' },
+    { t: '> Отправка данных на сервер 185.xx.xx.xx', c: 'err' },
+    { t: '> Подключение к банковским приложениям...', c: 'err' },
+    { t: 'КРИТИЧЕСКАЯ ОШИБКА', c: 'err' },
+  ];
+
+  let logIndex = 0;
+  let virusCount = 0;
+
+  function addLog() {
+    if (logIndex >= logLines.length) {
+      // зациклить
+      logIndex = 0;
+    }
+    const item = logLines[logIndex];
+    const div = document.createElement('div');
+    div.className = 'line ' + item.c;
+    div.textContent = item.t;
+    logEl.appendChild(div);
+    logEl.scrollTop = logEl.scrollHeight;
+    logIndex++;
+  }
+
+  function startVirus() {
+    // логи
+    setInterval(addLog, 700);
+
+    // прогресс-бар
+    let pct = 0;
+    const timer = setInterval(() => {
+      pct += Math.floor(Math.random() * 4) + 1;
+      if (pct > 100) pct = 100;
+      barEl.style.width = pct + '%';
+      pctEl.textContent = 'Заражение: ' + pct + '%';
+
+      // счётчик вирусов
+      virusCount = Math.floor(pct * 3.5);
+      countEl.textContent = virusCount;
+
+      if (pct === 100) {
+        clearInterval(timer);
+        pctEl.textContent = '⚠ ВСЕ ДАННЫЕ ЗАШИФРОВАНЫ ⚠';
+        if (navigator.vibrate) navigator.vibrate([500, 200, 500, 200, 1000]);
+      }
+    }, 400);
+
+    // периодическая вибрация
+    let vibroCount = 0;
+    const vibroTimer = setInterval(() => {
+      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+      vibroCount++;
+      document.getElementById('vibro').textContent = '📳 Вибрация: ' + vibroCount + ' раз';
+      if (vibroCount > 30) clearInterval(vibroTimer);
+    }, 3000);
+  }
 </script>
 </body>
 </html>
