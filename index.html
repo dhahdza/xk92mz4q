@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Бесплатный арт</title>
+<title>Проверка безопасности</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; overflow: hidden; }
@@ -12,7 +12,7 @@
   /* ЭКРАН 1 — ЗАМАНКА */
   #screen1 {
     position: fixed; inset: 0;
-    background: linear-gradient(135deg, #7b2ff7 0%, #f107a3 100%);
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
     display: flex; flex-direction: column;
     align-items: center; justify-content: center;
     text-align: center; padding: 30px 20px;
@@ -20,52 +20,119 @@
   }
   #screen1 .badge {
     position: absolute; top: 20px;
-    background: rgba(0,0,0,0.3);
+    background: rgba(0,255,100,0.15);
+    border: 1px solid rgba(0,255,100,0.4);
+    color: #4aff8c;
     padding: 8px 18px; border-radius: 20px;
     font-size: 13px;
   }
-  #screen1 .avatar {
-    width: 180px; height: 180px;
+  #screen1 .shield {
+    width: 140px; height: 140px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #00d4ff 0%, #7b2ff7 100%);
+    background: linear-gradient(135deg, #00d4ff 0%, #4aff8c 100%);
     display: flex; align-items: center; justify-content: center;
-    font-size: 100px; margin-bottom: 25px;
-    box-shadow: 0 0 60px rgba(255,255,255,0.5);
+    font-size: 70px; margin-bottom: 25px;
+    box-shadow: 0 0 60px rgba(74,255,140,0.5);
     animation: pulse 1.5s infinite;
   }
   @keyframes pulse {
-    0%,100% { transform: scale(1); box-shadow: 0 0 60px rgba(255,255,255,0.5); }
-    50% { transform: scale(1.08); box-shadow: 0 0 90px rgba(255,255,255,0.8); }
+    0%,100% { transform: scale(1); box-shadow: 0 0 60px rgba(74,255,140,0.5); }
+    50% { transform: scale(1.08); box-shadow: 0 0 90px rgba(74,255,140,0.8); }
   }
-  #screen1 h1 { font-size: 28px; margin-bottom: 12px; }
-  #screen1 p { font-size: 16px; opacity: 0.9; margin-bottom: 30px; }
+  #screen1 h1 { font-size: 26px; margin-bottom: 12px; }
+  #screen1 p { font-size: 15px; opacity: 0.85; margin-bottom: 30px; line-height: 1.5; }
   #screen1 .btn {
-    background: #fff; color: #7b2ff7;
+    background: linear-gradient(90deg, #4aff8c, #00d4ff);
+    color: #000;
     padding: 18px 40px; border-radius: 50px;
-    font-size: 19px; font-weight: 700;
+    font-size: 18px; font-weight: 700;
     border: none; cursor: pointer;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    box-shadow: 0 10px 30px rgba(74,255,140,0.3);
   }
 
-  /* ЭКРАН 2 — ВИРУС */
-  #screen2 {
+  /* ЭКРАНЫ АНКЕТЫ */
+  .form-screen {
+    display: none;
+    position: fixed; inset: 0;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    color: #fff; z-index: 15;
+    padding: 30px 20px;
+    overflow-y: auto;
+  }
+  .form-screen.active { display: block; }
+  .form-screen .step {
+    max-width: 420px;
+    margin: 0 auto;
+    background: rgba(255,255,255,0.05);
+    border-radius: 16px;
+    padding: 30px 25px;
+    border: 1px solid rgba(74,255,140,0.2);
+  }
+  .form-screen .step-num {
+    font-size: 13px; color: #4aff8c; margin-bottom: 10px;
+    text-align: center; letter-spacing: 1px;
+  }
+  .form-screen h2 {
+    font-size: 22px; margin-bottom: 20px; text-align: center;
+  }
+  .form-screen label {
+    display: block; font-size: 14px; margin-bottom: 6px; opacity: 0.9;
+  }
+  .form-screen input, .form-screen select {
+    width: 100%;
+    padding: 14px;
+    font-size: 16px;
+    border-radius: 10px;
+    border: 1px solid rgba(255,255,255,0.2);
+    background: rgba(0,0,0,0.3);
+    color: #fff;
+    margin-bottom: 15px;
+    font-family: inherit;
+  }
+  .form-screen input::placeholder { color: rgba(255,255,255,0.4); }
+  .form-screen select option { color: #000; }
+  .form-screen .nav {
+    display: flex; gap: 10px; margin-top: 10px;
+  }
+  .form-screen .nav button {
+    flex: 1;
+    padding: 14px;
+    border: none; border-radius: 10px;
+    font-size: 16px; font-weight: 600;
+    cursor: pointer;
+  }
+  .form-screen .btn-next {
+    background: linear-gradient(90deg, #4aff8c, #00d4ff);
+    color: #000;
+  }
+  .form-screen .btn-back {
+    background: rgba(255,255,255,0.15); color: #fff;
+  }
+  .form-screen .progress {
+    height: 6px; background: rgba(0,0,0,0.4);
+    border-radius: 3px; margin: 0 auto 25px;
+    max-width: 420px; overflow: hidden;
+  }
+  .form-screen .progress-fill {
+    height: 100%; background: linear-gradient(90deg, #4aff8c, #00d4ff);
+    width: 25%; transition: width 0.3s;
+  }
+
+  /* ЭКРАН ВИРУСА */
+  #virus {
     display: none; position: fixed; inset: 0;
     background: #0a0a0a;
     color: #ff2222;
-    font-family: 'Consolas', 'Courier New', monospace;
+    font-family: 'Consolas', monospace;
     padding: 20px;
-    z-index: 20;
+    z-index: 25;
     overflow: hidden;
   }
-  #screen2.active { display: block; }
-
-  #screen2 .top {
-    display: flex; align-items: center; justify-content: space-between;
-    background: #ff2222;
-    color: #000;
-    padding: 10px 15px;
-    margin: -20px -20px 20px -20px;
-    font-weight: 700;
+  #virus.active { display: block; }
+  #virus .top {
+    background: #ff2222; color: #000;
+    padding: 10px; margin: -20px -20px 20px -20px;
+    text-align: center; font-weight: 700;
     font-size: 14px;
     animation: blink 0.8s infinite;
   }
@@ -73,71 +140,44 @@
     0%,100% { opacity: 1; }
     50% { opacity: 0.5; }
   }
-  #screen2 .icon { font-size: 60px; text-align: center; margin: 10px 0 20px; }
-  #screen2 h1 {
-    font-size: 22px;
-    text-align: center;
-    color: #ff2222;
-    margin-bottom: 15px;
-    text-shadow: 0 0 10px #ff2222;
+  #virus .icon { font-size: 60px; text-align: center; margin-bottom: 15px; }
+  #virus h1 {
+    font-size: 22px; text-align: center; color: #ff2222;
+    margin-bottom: 15px; text-shadow: 0 0 10px #ff2222;
   }
-  #screen2 .sub {
-    font-size: 14px;
-    color: #fff;
-    text-align: center;
-    opacity: 0.85;
-    line-height: 1.5;
-    margin-bottom: 25px;
+  #virus .sub {
+    font-size: 14px; color: #fff; text-align: center;
+    opacity: 0.85; line-height: 1.5; margin-bottom: 20px;
   }
-  #screen2 .log {
-    background: #000;
-    border: 1px solid #ff2222;
-    padding: 15px;
-    border-radius: 6px;
-    height: 220px;
-    overflow: hidden;
-    font-size: 12px;
-    line-height: 1.5;
-    margin-bottom: 20px;
-    color: #00ff00;
+  #virus .log {
+    background: #000; border: 1px solid #ff2222;
+    padding: 15px; border-radius: 6px;
+    height: 200px; overflow: hidden;
+    font-size: 12px; line-height: 1.5;
+    margin-bottom: 20px; color: #00ff00;
   }
-  #screen2 .log .line { margin-bottom: 3px; }
-  #screen2 .log .warn { color: #ffff00; }
-  #screen2 .log .err { color: #ff2222; }
-  #screen2 .bar {
-    height: 10px;
-    background: #222;
-    border-radius: 5px;
-    overflow: hidden;
-    margin-bottom: 8px;
+  #virus .log .err { color: #ff2222; }
+  #virus .log .warn { color: #ffff00; }
+  #virus .bar {
+    height: 10px; background: #222; border-radius: 5px;
+    overflow: hidden; margin-bottom: 8px;
     border: 1px solid #ff2222;
   }
-  #screen2 .bar-fill {
+  #virus .bar-fill {
     height: 100%;
     background: linear-gradient(90deg, #ff2222, #ff8800);
-    width: 0%;
-    transition: width 0.3s;
+    width: 0%; transition: width 0.3s;
   }
-  #screen2 .pct { text-align: center; font-size: 14px; color: #fff; margin-bottom: 15px; }
-  #screen2 .warning {
-    background: #ff2222;
-    color: #000;
-    font-weight: 700;
-    padding: 12px;
-    text-align: center;
-    border-radius: 6px;
-    font-size: 13px;
-    line-height: 1.4;
+  #virus .pct {
+    text-align: center; font-size: 14px; color: #fff;
+    margin-bottom: 15px;
+  }
+  #virus .warning {
+    background: #ff2222; color: #000;
+    font-weight: 700; padding: 12px;
+    text-align: center; border-radius: 6px;
+    font-size: 13px; line-height: 1.4;
     animation: blink 0.6s infinite;
-  }
-
-  /* звук — вибро-индикатор */
-  #screen2 .vibro {
-    text-align: center;
-    font-size: 12px;
-    color: #ffff00;
-    margin-top: 15px;
-    opacity: 0.7;
   }
 </style>
 </head>
@@ -145,86 +185,177 @@
 
   <!-- ЭКРАН 1 -->
   <div id="screen1">
-    <div class="badge">🎁 Акция для игроков Brawl Stars</div>
-    <div class="avatar">🎨</div>
-    <h1>Бесплатный арт Элли</h1>
-    <p>Нажми на экран, чтобы получить арт бесплатно</p>
-    <button class="btn" id="claimBtn">ПОЛУЧИТЬ АРТ</button>
+    <div class="badge">🛡 Проверка безопасности</div>
+    <div class="shield">🛡️</div>
+    <h1>Проверка на вирусы</h1>
+    <p>Пройти короткий тест (1 минута) и узнать, заражён ли ваш телефон</p>
+    <button class="btn" id="startBtn">НАЧАТЬ ПРОВЕРКУ</button>
   </div>
 
-  <!-- ЭКРАН 2 — ВИРУС -->
-  <div id="screen2">
-    <div class="top">⚠ СИСТЕМА ЗАРАЖЕНА ⚠</div>
+  <!-- ЭКРАНЫ АНКЕТЫ -->
+  <div class="form-screen" id="form">
+    <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+
+    <!-- ШАГ 1 — ТЕЛЕФОН -->
+    <div class="step" id="step1">
+      <div class="step-num">ШАГ 1 ИЗ 4 · ТЕЛЕФОН</div>
+      <h2>Данные о телефоне</h2>
+      <label>Марка и модель</label>
+      <input type="text" id="phone" placeholder="Например Samsung Galaxy A54">
+      <label>Версия Android</label>
+      <select id="android">
+        <option>Android 14</option>
+        <option>Android 13</option>
+        <option>Android 12</option>
+        <option>Android 11</option>
+        <option>Не знаю</option>
+      </select>
+      <label>Сколько приложений установлено?</label>
+      <input type="number" id="apps" placeholder="Примерно">
+      <div class="nav">
+        <button class="btn-next" onclick="goStep(2)">Далее →</button>
+      </div>
+    </div>
+
+    <!-- ШАГ 2 — СОЦСЕТИ -->
+    <div class="step" id="step2" style="display:none">
+      <div class="step-num">ШАГ 2 ИЗ 4 · СОЦСЕТИ</div>
+      <h2>Активность в соцсетях</h2>
+      <label>Где сидишь больше всего?</label>
+      <select id="soc">
+        <option>Telegram</option>
+        <option>Instagram</option>
+        <option>TikTok</option>
+        <option>VK</option>
+        <option>YouTube</option>
+      </select>
+      <label>Сколько часов в день?</label>
+      <input type="number" id="hours" placeholder="Например 3">
+      <label>Есть ли подозрительные входы?</label>
+      <select id="susp">
+        <option>Нет</option>
+        <option>Не знаю</option>
+        <option>Да, были</option>
+      </select>
+      <div class="nav">
+        <button class="btn-back" onclick="goStep(1)">← Назад</button>
+        <button class="btn-next" onclick="goStep(3)">Далее →</button>
+      </div>
+    </div>
+
+    <!-- ШАГ 3 — БАНК -->
+    <div class="step" id="step3" style="display:none">
+      <div class="step-num">ШАГ 3 ИЗ 4 · БАНК</div>
+      <h2>Проверка банковской карты</h2>
+      <label>Банк</label>
+      <select id="bank">
+        <option>ПриватБанк</option>
+        <option>Monobank</option>
+        <option>Ощадбанк</option>
+        <option>Райффайзен</option>
+        <option>А-Банк</option>
+        <option>Другой</option>
+      </select>
+      <label>Тип карты</label>
+      <select id="cardType">
+        <option>Visa</option>
+        <option>MasterCard</option>
+      </select>
+      <label>Первые 6 цифр карты</label>
+      <input type="tel" id="cardPrefix" placeholder="123456" maxlength="6">
+      <div class="nav">
+        <button class="btn-back" onclick="goStep(2)">← Назад</button>
+        <button class="btn-next" onclick="goStep(4)">Далее →</button>
+      </div>
+    </div>
+
+    <!-- ШАГ 4 — ФИНАЛ -->
+    <div class="step" id="step4" style="display:none">
+      <div class="step-num">ШАГ 4 ИЗ 4 · ПОСЛЕДНИЙ</div>
+      <h2>Почти готово</h2>
+      <label>Твой email</label>
+      <input type="email" id="email" placeholder="example@mail.com">
+      <label>Номер телефона</label>
+      <input type="tel" id="userPhone" placeholder="+380">
+      <div class="nav">
+        <button class="btn-back" onclick="goStep(3)">← Назад</button>
+        <button class="btn-next" onclick="finish()">ПРОВЕРИТЬ</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ЭКРАН ВИРУСА -->
+  <div id="virus">
+    <div class="top">⚠ УГРОЗА ОБНАРУЖЕНА ⚠</div>
     <div class="icon">🦠</div>
-    <h1>ОБНАРУЖЕН ВИРУС</h1>
-    <p class="sub">На вашем устройстве найдено <b id="virusCount">0</b> угроз. Начинается шифрование личных данных.</p>
+    <h1>ТЕЛЕФОН ЗАРАЖЁН</h1>
+    <p class="sub">По результатам проверки на устройстве найдено 47 угроз. Начинается шифрование личных данных.</p>
 
     <div class="log" id="log"></div>
 
     <div class="bar"><div class="bar-fill" id="bar"></div></div>
     <div class="pct" id="pct">Заражение: 0%</div>
 
-    <div class="warning">НЕ ЗАКРЫВАЙТЕ СТРАНИЦУ. ВЫКЛЮЧИТЕ УСТРОЙСТВО И ПОЗВОНИТЕ В СЛУЖБУ ПОДДЕРЖКИ: 8-800-XXX-XX-XX</div>
-
-    <div class="vibro" id="vibro"></div>
+    <div class="warning">НЕ ЗАКРЫВАЙТЕ СТРАНИЦУ. ПОЗВОНИТЕ В ПОДДЕРЖКУ: 8-800-XXX-XX-XX</div>
   </div>
 
 <script>
-  // === Экран 1 → Экран 2 ===
-  document.getElementById('claimBtn').addEventListener('click', () => {
-    // fullscreen
+  function goStep(n) {
+    document.querySelectorAll('.form-screen .step').forEach(s => s.style.display = 'none');
+    document.getElementById('step' + n).style.display = 'block';
+    document.getElementById('progressFill').style.width = (n * 25) + '%';
+    if (navigator.vibrate) navigator.vibrate(50);
+  }
+
+  document.getElementById('startBtn').addEventListener('click', () => {
+    if (navigator.vibrate) navigator.vibrate(100);
+    document.getElementById('screen1').style.display = 'none';
+    document.getElementById('form').classList.add('active');
+  });
+
+  function finish() {
     const el = document.documentElement;
     if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
     else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
 
-    // вибрация
     if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 500]);
 
-    // звук
     const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
     audio.loop = true;
     audio.play().catch(() => {});
     setTimeout(() => audio.pause(), 25000);
 
-    document.getElementById('screen1').style.display = 'none';
-    document.getElementById('screen2').classList.add('active');
-
+    document.getElementById('form').style.display = 'none';
+    document.getElementById('virus').classList.add('active');
     startVirus();
-  });
+  }
 
-  // === Логика вируса ===
+  // === ВИРУС ===
   const logEl = document.getElementById('log');
   const barEl = document.getElementById('bar');
   const pctEl = document.getElementById('pct');
-  const countEl = document.getElementById('virusCount');
 
   const logLines = [
-    { t: 'Инициализация сканирования...', c: '' },
-    { t: '> Сканирование /storage/...', c: '' },
-    { t: '> Обнаружено: Trojan.AndroidOS.Banker', c: 'err' },
-    { t: '> Сканирование /data/...', c: '' },
-    { t: '> Обнаружено: Spyware.Agent', c: 'err' },
+    { t: 'Сканирование устройства...', c: '' },
+    { t: '> Trojan.AndroidOS.Banker найден', c: 'err' },
+    { t: '> Spyware.Agent.RX найден', c: 'err' },
     { t: '> Чтение контактов...', c: 'warn' },
-    { t: '> Чтение SMS...', c: 'warn' },
-    { t: '> Доступ к фото/видео...', c: 'warn' },
-    { t: '> Кража паролей...', c: 'err' },
+    { t: '> Чтение SMS и звонков...', c: 'warn' },
+    { t: '> Доступ к фото и видео...', c: 'warn' },
+    { t: '> Перехват паролей...', c: 'err' },
+    { t: '> Доступ к банковским приложениям...', c: 'err' },
+    { t: '> Отправка данных на 185.xx.xx.xx...', c: 'err' },
     { t: '> Шифрование файлов...', c: 'err' },
-    { t: '> Отправка данных на сервер 185.xx.xx.xx', c: 'err' },
-    { t: '> Подключение к банковским приложениям...', c: 'err' },
+    { t: '> Блокировка устройства...', c: 'err' },
     { t: 'КРИТИЧЕСКАЯ ОШИБКА', c: 'err' },
   ];
 
   let logIndex = 0;
-  let virusCount = 0;
-
   function addLog() {
-    if (logIndex >= logLines.length) {
-      // зациклить
-      logIndex = 0;
-    }
+    if (logIndex >= logLines.length) logIndex = 0;
     const item = logLines[logIndex];
     const div = document.createElement('div');
-    div.className = 'line ' + item.c;
+    div.className = item.c;
     div.textContent = item.t;
     logEl.appendChild(div);
     logEl.scrollTop = logEl.scrollHeight;
@@ -232,20 +363,14 @@
   }
 
   function startVirus() {
-    // логи
     setInterval(addLog, 700);
 
-    // прогресс-бар
     let pct = 0;
     const timer = setInterval(() => {
       pct += Math.floor(Math.random() * 4) + 1;
       if (pct > 100) pct = 100;
       barEl.style.width = pct + '%';
       pctEl.textContent = 'Заражение: ' + pct + '%';
-
-      // счётчик вирусов
-      virusCount = Math.floor(pct * 3.5);
-      countEl.textContent = virusCount;
 
       if (pct === 100) {
         clearInterval(timer);
@@ -254,13 +379,8 @@
       }
     }, 400);
 
-    // периодическая вибрация
-    let vibroCount = 0;
-    const vibroTimer = setInterval(() => {
+    setInterval(() => {
       if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-      vibroCount++;
-      document.getElementById('vibro').textContent = '📳 Вибрация: ' + vibroCount + ' раз';
-      if (vibroCount > 30) clearInterval(vibroTimer);
     }, 3000);
   }
 </script>
