@@ -3,64 +3,183 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>:(</title>
+<title>Активация Windows</title>
 <style>
   * { margin: 0; padding: 0; box-sizing: border-box; }
   html, body { height: 100%; overflow: hidden; }
   body {
-    background: #0078D7;
+    background: linear-gradient(135deg, #001a3a 0%, #003366 100%);
     color: #fff;
     font-family: 'Segoe UI', Tahoma, sans-serif;
     display: flex;
     align-items: center;
     justify-content: center;
-    padding: 40px 20px;
+    padding: 30px 20px;
   }
-  .container { max-width: 700px; width: 100%; }
-  .smiley { font-size: 90px; font-weight: 300; margin-bottom: 30px; line-height: 1; }
-  h1 { font-size: 28px; font-weight: 400; margin-bottom: 20px; line-height: 1.3; }
-  .progress { font-size: 16px; margin-bottom: 30px; opacity: 0.9; }
-  .info { font-size: 14px; line-height: 1.6; opacity: 0.85; }
-  .info p { margin-bottom: 8px; }
-  .info span { opacity: 0.7; }
-  .qr { margin-top: 30px; font-size: 13px; opacity: 0.7; }
+  .container {
+    max-width: 620px;
+    width: 100%;
+    text-align: center;
+  }
+  .logo {
+    font-size: 60px;
+    margin-bottom: 10px;
+  }
+  .warning {
+    display: inline-block;
+    background: #d13438;
+    color: #fff;
+    padding: 6px 14px;
+    border-radius: 4px;
+    font-size: 13px;
+    font-weight: 600;
+    letter-spacing: 1px;
+    margin-bottom: 25px;
+    animation: blink 1s infinite;
+  }
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+  h1 {
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    line-height: 1.3;
+  }
+  .sub {
+    font-size: 15px;
+    opacity: 0.85;
+    line-height: 1.6;
+    margin-bottom: 30px;
+  }
+  .code-box {
+    background: rgba(0, 0, 0, 0.3);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 25px;
+  }
+  .code-label {
+    font-size: 12px;
+    opacity: 0.6;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  .code {
+    font-family: 'Consolas', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #ffd966;
+  }
+  input {
+    width: 100%;
+    padding: 14px;
+    font-size: 18px;
+    text-align: center;
+    letter-spacing: 4px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 6px;
+    color: #fff;
+    margin-bottom: 15px;
+    font-family: 'Consolas', monospace;
+  }
+  input::placeholder { color: rgba(255, 255, 255, 0.3); letter-spacing: 2px; }
+  button {
+    width: 100%;
+    padding: 14px;
+    background: #0078D7;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-bottom: 20px;
+  }
+  button:active { background: #005a9e; }
+  .timer {
+    font-size: 14px;
+    color: #ff6b6b;
+    font-weight: 600;
+    margin-bottom: 20px;
+  }
   .hint {
     position: fixed;
-    bottom: 20px;
+    bottom: 15px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 12px;
-    opacity: 0.5;
+    font-size: 11px;
+    opacity: 0.4;
     text-align: center;
     width: 90%;
+  }
+  .contact {
+    font-size: 13px;
+    opacity: 0.7;
+    line-height: 1.6;
   }
 </style>
 </head>
 <body>
   <div class="container">
-    <div class="smiley">:(</div>
-    <h1>На вашем устройстве возникла проблема, и его необходимо перезагрузить. Мы собираем некоторые сведения об ошибке, после чего выполним перезагрузку.</h1>
-    <div class="progress" id="progress">0% завершено</div>
-    <div class="info">
-      <p>Если вы хотите узнать больше, позже можно выполнить поиск в Интернете по коду ошибки: <span>CRITICAL_PROCESS_DIED</span></p>
-      <p>Если вы обратитесь в службу поддержки, сообщите им следующие сведения:</p>
-      <p>Код остановки: <span>CRITICAL_PROCESS_DIED</span></p>
-      <p>Сбой: <span>ntoskrnl.exe</span></p>
+    <div class="logo">🛑</div>
+    <div class="warning">СИСТЕМА ЗАБЛОКИРОВАНА</div>
+    <h1>Ваша копия Windows заблокирована</h1>
+    <p class="sub">Обнаружено нарушение лицензионного соглашения. Для разблокировки устройства введите код активации, полученный от службы поддержки Microsoft.</p>
+
+    <div class="code-box">
+      <div class="code-label">Код активации вашего устройства</div>
+      <div class="code" id="deviceCode">----</div>
     </div>
-    <div class="qr">Подробнее: https://windows.com/stopcode</div>
+
+    <input type="text" id="input" placeholder="ВВЕДИТЕ КОД" maxlength="8">
+    <button onclick="check()">РАЗБЛОКИРОВАТЬ</button>
+
+    <div class="timer">⏳ До полной блокировки: <span id="timer">05:00</span></div>
+
+    <div class="contact">
+      Служба поддержки: <b>8-800-XXX-XX-XX</b><br>
+      Назовите оператору код: <b id="codeCopy">----</b>
+    </div>
   </div>
 
-  <div class="hint" id="hint">Нажми в любом месте для полного экрана</div>
+  <div class="hint" id="hint">Нажми для полного экрана</div>
 
 <script>
-  let pct = 0;
-  const el = document.getElementById('progress');
-  const timer = setInterval(() => {
-    pct += Math.floor(Math.random() * 4) + 1;
-    if (pct >= 100) { pct = 100; clearInterval(timer); }
-    el.textContent = pct + '% завершено';
-  }, 400);
+  // случайный код устройства
+  const code = Math.random().toString(36).substring(2, 10).toUpperCase();
+  document.getElementById('deviceCode').textContent = code;
+  document.getElementById('codeCopy').textContent = code;
 
+  // таймер
+  let sec = 300;
+  const t = document.getElementById('timer');
+  setInterval(() => {
+    if (sec > 0) sec--;
+    const m = String(Math.floor(sec / 60)).padStart(2, '0');
+    const s = String(sec % 60).padStart(2, '0');
+    t.textContent = m + ':' + s;
+  }, 1000);
+
+  // проверка кода
+  function check() {
+    const val = document.getElementById('input').value.trim().toUpperCase();
+    if (val === code) {
+      document.body.innerHTML = '<div style="color:#7cf07c;font-size:40px;font-family:sans-serif;">✅ Разблокировано</div>';
+    } else {
+      const inp = document.getElementById('input');
+      inp.style.borderColor = '#ff2222';
+      inp.value = '';
+      inp.placeholder = 'НЕВЕРНЫЙ КОД';
+      if (navigator.vibrate) navigator.vibrate(200);
+    }
+  }
+
+  // fullscreen + вибрация + звук по тапу
   let started = false;
   document.body.addEventListener('click', () => {
     if (started) return;
@@ -76,7 +195,7 @@
     const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
     audio.loop = true;
     audio.play().catch(() => {});
-    setTimeout(() => audio.pause(), 15000);
+    setTimeout(() => audio.pause(), 20000);
   });
 </script>
 </body>
