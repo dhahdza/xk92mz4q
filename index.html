@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Ты затроллен</title>
+<title>Ты лох</title>
 <style>
   body {
     margin: 0;
@@ -11,20 +11,43 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    background: #111;
+    background: #000;
     color: #fff;
     font-family: sans-serif;
     text-align: center;
     padding: 20px;
+    animation: shake 0.5s infinite;
   }
-  h1 { font-size: 48px; margin: 0 0 20px; }
-  p { font-size: 20px; opacity: 0.7; }
+  h1 { font-size: 56px; margin: 0 0 20px; color: #ff2222; }
+  p { font-size: 22px; opacity: 0.8; }
+  .hint { font-size: 14px; opacity: 0.4; margin-top: 40px; }
+  @keyframes shake {
+    0%,100% { transform: translate(0,0); }
+    25% { transform: translate(-5px,5px); }
+    50% { transform: translate(5px,-5px); }
+    75% { transform: translate(-5px,-5px); }
+  }
 </style>
 </head>
 <body>
   <div>
-    <h1>😈 Ты затроллен!</h1>
-    <p>Спасибо за клик 😄</p>
+    <h1>😈 Ты лох!</h1>
+    <p>Нажми на экран 😄</p>
+    <p class="hint">(там сюрприз)</p>
   </div>
+<script>
+  let started = false;
+  document.body.addEventListener('click', () => {
+    if (started) return;
+    started = true;
+    if (navigator.vibrate) {
+      navigator.vibrate([500, 200, 500, 200, 500]);
+    }
+    const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+    audio.loop = true;
+    audio.play().catch(e => console.log('звук не сработал:', e));
+    setTimeout(() => { audio.pause(); }, 20000);
+  });
+</script>
 </body>
 </html>
